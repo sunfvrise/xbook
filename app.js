@@ -19,7 +19,37 @@ const stages = {
     description: "先确认已获准去靴全负重，并适合基础平衡训练。关注步态、活动范围和动作质量，逐步恢复日常行走的信心。",
     goals: ["有许可且症状稳定时，从稳定地面的双脚平衡起步。", "让足第 2 趾与膝中点朝前，使用稳固支撑防跌倒。", "当天与次日复核身体反应，再与康复师讨论进阶。"],
     boundary: "满 6 周不代表自动去靴。单脚、闭眼、跳跃或跑步需要额外评估与许可。"
+  },
+  late: {
+    label: "后期康复 / 术后 8–12 周",
+    title: "先评估，再考虑慢跑与强化。",
+    description: "这一章节面向有运动恢复目标的人群。先由康复师评估肌力、平衡和步态，再安排动态控制及跳跃等训练。",
+    goals: ["肌力至少达到健侧 90%，并具备良好静态平衡。", "正常步态下改变方向或转向时无痛。", "跳跃须单独获准并由康复师指导，普通生活恢复不必完成。"],
+    boundary: "连续 25 次单腿提踵只是原文开启强化训练的一项条件，不能替代其他评估或直接授权跳跃。"
+  },
+  sport: {
+    label: "重返运动 / 术后 12–16 周",
+    title: "从功能评估，走向专项运动。",
+    description: "根据运动目标与测试结果讨论加速、变向和灵敏训练。已有基础训练是否继续，由康复师结合当前功能安排。",
+    goals: ["由专业人员评估 SEBT / YEBT 和跳跃测试。", "原文要求相关测试准确性超过 90%，测量方法需专业解释。", "专项训练根据动作质量和症状反应逐步安排。"],
+    boundary: "到达 12 周不代表可以直接跑跳或变向。本地资料没有这些专项动作的视频，不用其他示范替代。"
+  },
+  competition: {
+    label: "重返竞技 / 术后 16 周以后",
+    title: "先适应全面训练，再讨论比赛。",
+    description: "回到竞技需要功能与心理准备共同达标。日常生活恢复者可与团队复核生活目标，无需照搬竞技训练。",
+    goals: ["无动态控制障碍，远近端力量和动作质量恢复。", "能够完成全量训练，且症状不增加。", "本人准备充分，并与治疗团队共同决定重返比赛。"],
+    boundary: "满 16 周不等于康复完成。竞技环境、疲劳或复杂地面训练需要个体安排。"
   }
+};
+
+const stageContent = {
+  protect: { exercises: [], featured: ["hip", "protected"], extra: [], heading: "保护期 · 先确认固定与近端训练", note: "患侧不负重。下方仅供理解近端肌力与缩足动作；固定内如何练习须先由团队确认。" },
+  restore: { exercises: ["sensory", "control"], featured: [], extra: ["angles", "hip"], heading: "恢复控制 · 坐位感觉与等长训练", note: "先获准去靴坐位训练；负重、活动角度与阻力分别按医嘱确认。" },
+  balance: { exercises: ["balance"], featured: [], extra: ["progress", "strength", "hip"], heading: "早期康复 · 步态与基础平衡", note: "先取得去靴全负重及基础平衡训练许可。单腿与不稳定表面属于额外进阶。" },
+  late: { exercises: [], featured: ["sport"], extra: ["strength", "progress"], heading: "后期康复 · 专业指导下的动态控制", note: "下方跳跃示范仅供获准后在康复师指导下使用。不能根据日期直接开始。" },
+  sport: { exercises: [], featured: [], extra: [], heading: "重返运动 · 先完成专业测试", note: "当前章节重点是功能测试和专项安排。原始资料未提供对应专项视频，请由康复师示教；可通过上方阶段导航复习基础动作。" },
+  competition: { exercises: [], featured: [], extra: [], heading: "重返竞技 · 核对全面训练反应", note: "本阶段以训练耐受、动作质量和准备度复核为主，没有对应原始媒体。请与团队制定比赛安排；可通过阶段导航复习已有动作。" }
 };
 
 const exercises = {
@@ -88,8 +118,6 @@ function mediaMarkup(item) {
     : `<a class="media-image-link" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="查看${item.title}原始大图（新窗口）"><img src="${url}" alt="${item.alt}" loading="lazy" width="716" height="1274"></a>`;
   return `<figure class="media-card"><div class="media-copy"><span class="tag">${item.label}</span><h4>${item.title}</h4><p>${item.permission}</p></div><div class="media-visual">${visual}</div><figcaption><span>原指南 · ${item.type === "video" ? "视频" : "图片"}示范</span><a href="${url}" target="_blank" rel="noopener noreferrer">${item.type === "video" ? "打开原视频" : "查看大图"} ↗</a></figcaption>${item.type === "video" ? '<p class="media-error" hidden role="status">视频暂时无法播放，请使用“打开原视频”链接查看。</p>' : ""}</figure>`;
 }
-document.querySelector("#basic-media").innerHTML = media.filter(item => item.group === "basic").map(mediaMarkup).join("");
-document.querySelector("#additional-media").innerHTML = mediaGroups.map(([key, title, description]) => `<section class="media-group"><h3>${title}</h3><p>${description}</p><div class="media-grid">${media.filter(item => item.group === key).map(mediaMarkup).join("")}</div></section>`).join("");
 function setupMedia(root) {
   root.querySelectorAll("video").forEach(video => {
     video.addEventListener("play", () => {
@@ -102,7 +130,6 @@ function setupMedia(root) {
     video.querySelector("source").addEventListener("error", showError);
   });
 }
-setupMedia(document);
 document.querySelector(".media-library").addEventListener("toggle", event => {
   if (!event.currentTarget.open) event.currentTarget.querySelectorAll("video").forEach(video => video.pause());
 });
@@ -111,14 +138,38 @@ const tabs = [...document.querySelectorAll('[role="tab"]')];
 const panel = document.querySelector("#stage-panel");
 function selectStage(key, focus = false) {
   const stage = stages[key];
+  document.querySelectorAll("#practice video, dialog video").forEach(video => video.pause());
+  if (document.querySelector("dialog").open) document.querySelector("dialog").close();
   tabs.forEach(tab => {
     const selected = tab.dataset.stage === key;
     tab.setAttribute("aria-selected", String(selected));
     tab.tabIndex = selected ? 0 : -1;
     if (selected && focus) tab.focus();
   });
+  document.querySelector("#practice").hidden = !stage;
+  if (!stage) {
+    panel.setAttribute("aria-labelledby", "stage-heading");
+    panel.innerHTML = "<p>请填写有效的手术日期，或选择上方阶段手动浏览资料。</p>";
+    return;
+  }
   panel.setAttribute("aria-labelledby", `tab-${key}`);
   panel.innerHTML = `<div><span class="stage-label">${stage.label}</span><h3>${stage.title}</h3><p>${stage.description}</p></div><div class="stage-goals"><h4>这一阶段，记住三件事</h4><ul>${stage.goals.map(goal => `<li>${goal}</li>`).join("")}</ul><p class="stage-boundary">${stage.boundary}</p></div>`;
+  const content = stageContent[key];
+  document.querySelector("#practice-heading").textContent = content.heading;
+  document.querySelector("#practice-context").textContent = `${stage.label}。${content.note}`;
+  document.querySelectorAll(".exercise-card").forEach(card => {
+    card.hidden = !content.exercises.includes(card.querySelector("[data-exercise]").dataset.exercise);
+  });
+  const featured = media.filter(item => content.exercises.includes(item.exercise) || content.featured.includes(item.group));
+  document.querySelector("#basic-media").innerHTML = featured.map(mediaMarkup).join("");
+  document.querySelector(".media-heading").hidden = !featured.length;
+  document.querySelector(".practice-footnote").hidden = !featured.length;
+  const library = document.querySelector(".media-library");
+  library.open = false;
+  library.hidden = !content.extra.length;
+  document.querySelector("#additional-media").innerHTML = mediaGroups.filter(([group]) => content.extra.includes(group)).map(([group, title, description]) => `<section class="media-group"><h3>${title}</h3><p>${description}</p><div class="media-grid">${media.filter(item => item.group === group).map(mediaMarkup).join("")}</div></section>`).join("");
+  document.querySelector(".media-credit").hidden = !featured.length && !content.extra.length;
+  setupMedia(document.querySelector("#practice"));
 }
 tabs.forEach((tab, index) => {
   tab.addEventListener("click", () => selectStage(tab.dataset.stage));
@@ -134,7 +185,6 @@ tabs.forEach((tab, index) => {
     }
   });
 });
-selectStage("protect");
 
 const dateInput = document.querySelector("#surgery-date");
 const dateResult = document.querySelector("#date-result");
@@ -165,20 +215,23 @@ function refreshDate() {
   dateInput.max = localDateString(now);
   const storageNotice = dateStorageAvailable ? "日期已在本机记住，可随时修改。" : "本次可使用日期；浏览器未允许本地保存。";
   if (!dateInput.value) {
+    selectStage(null);
     dateResult.textContent = dateStorageAvailable ? "日期已清除，可重新选择；本机将记住清除状态。" : "请选择日期；浏览器未允许本地保存。";
     return true;
   }
   const chosen = parseStartDate(dateInput.value);
   if (!chosen) {
+    selectStage(null);
     dateResult.textContent = "请填写有效的手术日期。";
     return false;
   }
   const days = calendarDay(now) - calendarDay(chosen);
   if (days < 0) {
+    selectStage(null);
     dateResult.textContent = "手术日期晚于今天，请核对日期；术前不能按术后阶段练习。";
     return false;
   }
-  const key = days < 14 ? "protect" : days < 42 ? "restore" : "balance";
+  const key = days < 14 ? "protect" : days < 42 ? "restore" : days < 56 ? "balance" : days < 84 ? "late" : days < 112 ? "sport" : "competition";
   selectStage(key);
   dateResult.textContent = `按本机今天（${localDateString(now)}）计算：距手术 ${days} 天，已过 ${Math.floor(days / 7)} 周 ${days % 7} 天。${storageNotice}已定位阅读章节，不能据此取得练习许可。`;
   return true;
@@ -200,17 +253,24 @@ dateInput.addEventListener("input", () => {
     refreshDate();
   }
 });
-document.querySelector("#clear-date").addEventListener("click", () => {
-  dateInput.value = "";
-  saveStartDate();
-  refreshDate();
-  dateInput.focus();
-});
 // Refresh against the local calendar when returning to a page left open overnight.
 document.addEventListener("visibilitychange", () => {
-  if (!document.hidden) refreshDate();
+  if (!document.hidden) refreshCalendar();
 });
-window.addEventListener("focus", refreshDate);
+let lastCalendarDate = localDateString(new Date());
+let midnightTimer;
+function refreshCalendar() {
+  const now = new Date();
+  const today = localDateString(now);
+  if (today !== lastCalendarDate) {
+    lastCalendarDate = today;
+    refreshDate();
+  }
+  clearTimeout(midnightTimer);
+  midnightTimer = setTimeout(refreshCalendar, new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1) - now + 100);
+}
+window.addEventListener("focus", refreshCalendar);
+refreshCalendar();
 refreshDate();
 
 const dialog = document.querySelector("#exercise-dialog");
