@@ -7,15 +7,15 @@
   <meta name="description" content="踝关节外侧韧带修复或重建术后的患者康复阅读指南。了解阶段目标、居家练习步骤与需要就医的信号。">
   <title>慢慢走稳 · 踝关节术后康复指南</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="./styles.css">
-  <script src="./app.js" defer></script>
+  <link rel="stylesheet" href="./styles.css?v=20261020-10">
+  <script src="./app.js?v=20261020-10" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">跳到正文</a>
   <header class="header">
     <a class="brand" href="./" aria-label="慢慢走稳，首页"><span class="brand-mark" aria-hidden="true">↗</span>慢慢走稳<span class="brand-note">康复生活指南</span></a>
     <nav aria-label="主导航"><a href="#stages">康复阶段</a><a href="#practice">居家练习</a><a href="#care">身体反馈</a></nav>
-    <a class="header-link" href="#sources">关于指南 <span aria-hidden="true">↗</span></a>
+    <button class="date-status" id="edit-date" aria-haspopup="dialog"><span id="date-status-label">确认手术日期</span><small id="date-status-detail">设置后定位阅读阶段 · 修改 ↗</small></button>
   </header>
   <main id="main">
     <section class="hero" aria-labelledby="hero-title">
@@ -35,12 +35,9 @@
 
     <section class="section stages" id="stages" aria-labelledby="stage-heading">
       <div class="section-heading"><div><p class="eyebrow">01 / 找到这一阶段</p><h2 id="stage-heading">看目标，也看身体的准备。</h2></div><p class="section-note">术后周数是阅读线索。<br>到达某一天，并不代表可以自动进阶。</p></div>
-      <div class="date-tool">
-        <label for="surgery-date">术后起始日期<span>首次默认今天，请按实际手术日期修改</span></label>
-        <div class="date-controls"><input type="date" id="surgery-date" aria-describedby="date-result"></div>
-        <p id="date-result" role="status" aria-live="polite">日期保存在本机，可随时修改。</p>
-      </div>
+      <div class="stage-location"><p id="date-result" role="status" aria-live="polite">确认手术日期后定位阅读阶段，也可点击下方自由浏览。</p><button class="text-button" id="recommended-stage" hidden>回到建议阅读阶段 ↓</button></div>
       <div class="stage-tabs" role="tablist" aria-label="康复阶段">
+        <button id="tab-preop" role="tab" aria-selected="false" aria-controls="stage-panel" tabindex="-1" data-stage="preop"><span>00</span><strong>术前准备</strong><small>手术前 · 预康复</small></button>
         <button id="tab-protect" role="tab" aria-selected="true" aria-controls="stage-panel" tabindex="0" data-stage="protect"><span>01</span><strong>先保护好</strong><small>术后 0–14 天</small></button>
         <button id="tab-restore" role="tab" aria-selected="false" aria-controls="stage-panel" tabindex="-1" data-stage="restore"><span>02</span><strong>慢慢恢复控制</strong><small>术后 2–6 周</small></button>
         <button id="tab-balance" role="tab" aria-selected="false" aria-controls="stage-panel" tabindex="-1" data-stage="balance"><span>03</span><strong>重新走稳</strong><small>术后 6 周以后</small></button>
@@ -59,13 +56,15 @@
     <section class="section practice" id="practice" aria-labelledby="practice-heading">
       <div class="section-heading"><div><p class="eyebrow">02 / 把动作做清楚</p><h2 id="practice-heading">先学一个，再慢慢练好。</h2></div><p class="section-note">先取得相应动作许可。<br>次数与时长由你的康复团队安排。</p></div>
       <p class="practice-context" id="practice-context" role="status"></p>
-      <div class="exercise-grid">
-        <article class="exercise-card"><div class="exercise-visual sensory" aria-hidden="true"><span class="abstract-chair"></span><span class="visual-number">01</span><span class="visual-label">感觉 · 坐位</span></div><div class="exercise-content"><span class="tag">2–6 周 · 获准去靴坐位训练后</span><h3>找回足部的感觉</h3><p>从坐位轻柔的感觉输入开始，留意足的位置，避免向内翻。</p><button class="card-button" data-exercise="sensory">阅读动作步骤 <span aria-hidden="true">↗</span></button></div></article>
-        <article class="exercise-card"><div class="exercise-visual control" aria-hidden="true"><span class="abstract-control"></span><span class="visual-number">02</span><span class="visual-label">控制 · 中立位</span></div><div class="exercise-content"><span class="tag">2–6 周 · 获准等长外翻训练后</span><h3>轻轻用力，保持位置</h3><p>认识中立位等长外翻：肌肉出力，关节不做明显翻转。</p><button class="card-button" data-exercise="control">阅读动作步骤 <span aria-hidden="true">↗</span></button></div></article>
-        <article class="exercise-card"><div class="exercise-visual balance" aria-hidden="true"><span class="abstract-balance"></span><span class="visual-number">03</span><span class="visual-label">平衡 · 双脚站立</span></div><div class="exercise-content"><span class="tag">6 周后 · 获准脱靴全负重及平衡训练</span><h3>从双脚站稳开始</h3><p>在平坦稳定的地面，适度缩窄脚距，找回站立时的控制。</p><button class="card-button" data-exercise="balance">阅读动作步骤 <span aria-hidden="true">↗</span></button></div></article>
+      <div class="preop-preparation" id="preop-preparation" hidden>
+        <article><h3>先了解恢复计划</h3><p>与手术团队确认固定、负重限制、复诊及康复安排，提前了解术后即刻保护的重要性。循序渐进，准备好支持你的人和安全的居家环境。</p></article>
+        <article><h3>学习冷敷方法</h3><p>请团队示教专用冷敷袋的使用、皮肤保护和观察方法；原文不建议使用矿泉水瓶或食品保鲜袋，以免冷冻不均造成冻伤。是否冷敷、时长与频次按团队要求。</p></article>
+        <article><h3>提前练习助行器具</h3><p>请专业人员调整拐杖或助行器高度，并示教转移、行走及充气靴穿戴。拐杖由手承重，避免压迫腋窝；检查橡皮垫和螺丝，保持地面干燥、通道通畅，首次练习有人保护。使用器具不等于获准患侧负重。</p></article>
       </div>
-      <p class="practice-footnote">下方为指南原始动作示范，卡片图形仅为装饰。先由康复师确认姿势；不自行添加单脚站立、闭眼或平衡垫。</p>
-      <div class="media-heading"><h3>本阶段资料 · 看图与视频</h3><p>先阅读适用条件，再观看示范。视频可手动播放、暂停或全屏查看。</p></div>
+      <p class="playback-hint">视频聚焦到视野中心时静音播放，离开自动暂停。可用播放控件暂停、开启声音或全屏查看。</p>
+      <div class="exercise-grid" id="featured-exercises"></div>
+      <p class="practice-footnote">先由康复师确认姿势；不自行添加单脚站立、闭眼或平衡垫。</p>
+      <div class="media-heading"><h3>本阶段资料 · 看图与视频</h3><p>先阅读适用条件。视频进入视野中心时静音播放，离开自动暂停；可手动播放、开启声音或全屏查看。</p></div>
       <div class="media-grid" id="basic-media"></div>
       <details class="media-library"><summary>本阶段补充示范 · 进阶需另行许可 <span aria-hidden="true">＋</span></summary><p class="media-library-intro">用于与你的康复师讨论动作选择，不是需要依次完成的训练清单。原资料未提供的动作视频，不使用其他动作替代。</p><div id="additional-media"></div></details>
       <p class="media-credit">原始图片与视频：指导赵嘉国，示范张树，拍摄齐秋实 · 北京同仁医院足踝外科中心。保留原图水印；原作者注明免费开放、请勿商用。</p>
@@ -81,9 +80,15 @@
     </section>
     <aside class="urgent" aria-labelledby="urgent-heading"><div><span class="eyebrow">需要就医的信号</span><h2 id="urgent-heading">这些不适，请先停下练习。</h2></div><div class="urgent-items"><p><strong>单侧小腿肿痛，同时胸痛或气促：</strong>立即拨打当地急救电话（中国大陆 120），不要自行驾车。</p><p><strong>足趾发紫、苍白、发冷或明显麻木：</strong>立即就医，不自行拆石膏。</p><p><strong>新的小腿肿热痛，或发热、伤口红热渗液：</strong>当天尽快就医，联系手术团队。</p></div></aside>
 
-    <section class="sources" id="sources" aria-labelledby="source-heading"><div><p class="eyebrow">关于这份指南</p><h2 id="source-heading">有依据，也有边界。</h2><p>这是供患者阅读的教育页面，不是个体运动处方。请与你的医生或康复师一起确定负重、动作、次数和进阶条件。</p></div><div class="source-details"><p><strong>康复资料</strong><br>赵嘉国 · 北京同仁医院足踝外科中心<br>《踝关节外侧韧带修复或重建术后基于目标的康复方案》</p><p>原文主体来自 ESSKA-AFAS，参考《踝关节外侧不稳定》（2023）。原作者注明免费开放、请勿商用。本页整理阶段与基础动作，保留来源，不执行原文中把硬物伸入石膏的操作。</p><a href="./resources/踝关节术后康复方案.docx" download>下载原始指南（Word） <span aria-hidden="true">↓</span></a><p class="risk-sources">警示症状参考：<a href="https://www.nhs.uk/conditions/deep-vein-thrombosis-dvt/" target="_blank" rel="noopener noreferrer">NHS 血栓教育</a>、<a href="https://www.orthoinfo.org/recovery/care-of-casts-and-splints" target="_blank" rel="noopener noreferrer">AAOS 石膏护理</a>、<a href="https://medlineplus.gov/ency/patientinstructions/000522.htm" target="_blank" rel="noopener noreferrer">MedlinePlus 就医信号</a>。</p></div></section>
+    <section class="sources" id="sources" aria-labelledby="source-heading"><div><p class="eyebrow">关于这份指南</p><h2 id="source-heading">有依据，也有边界。</h2><p>这是供患者阅读的教育页面，不是个体运动处方。请与你的医生或康复师一起确定负重、动作、次数和进阶条件。</p></div><div class="source-details"><p><strong>康复资料</strong><br>赵嘉国 · 北京同仁医院足踝外科中心<br>《踝关节外侧韧带修复或重建术后基于目标的康复方案》</p><p>原文主体来自 ESSKA-AFAS，参考《踝关节外侧不稳定》（2023）。原作者注明免费开放、请勿商用。本页整理阶段与基础动作，保留来源，不执行原文中把硬物伸入石膏的操作。</p><p class="risk-sources">警示症状参考：<a href="https://www.nhs.uk/conditions/deep-vein-thrombosis-dvt/" target="_blank" rel="noopener noreferrer">NHS 血栓教育</a>、<a href="https://www.orthoinfo.org/recovery/care-of-casts-and-splints" target="_blank" rel="noopener noreferrer">AAOS 石膏护理</a>、<a href="https://medlineplus.gov/ency/patientinstructions/000522.htm" target="_blank" rel="noopener noreferrer">MedlinePlus 就医信号</a>。</p></div></section>
   </main>
   <footer><a class="brand" href="./"><span class="brand-mark" aria-hidden="true">↗</span>慢慢走稳</a><span>给恢复一点耐心，给每一步一点支持。</span><a href="#main">回到顶部 ↑</a></footer>
+  <dialog id="date-dialog" aria-labelledby="date-title">
+    <div class="dialog-header"><span class="eyebrow">你的康复时间线</span><button id="close-date" aria-label="关闭日期设置">×</button></div>
+    <h2 id="date-title">先确认你的手术日期</h2>
+    <p id="date-intro">默认填入今天，请选择实际手术日；尚未手术也可以填写计划日期。之后可在右上角随时修改。</p>
+    <form id="date-form"><label for="surgery-date">手术完成日 / 计划手术日</label><input type="date" id="surgery-date" required min="1900-01-01" aria-describedby="date-help date-error"><p id="date-help">仅用于定位阅读资料，动作许可和负重限制仍以医嘱为准。日期只保存在当前浏览器。</p><p id="date-error" role="alert" hidden></p><button class="button dialog-done" type="submit">确认日期，查看阅读阶段 ↓</button></form>
+  </dialog>
   <dialog id="exercise-dialog" aria-labelledby="dialog-title"><div class="dialog-header"><span class="eyebrow">居家练习 · 阅读步骤</span><button id="close-dialog" aria-label="关闭动作步骤">×</button></div><div id="dialog-content"></div><button class="button dialog-done" id="dialog-done">我已了解</button></dialog>
 </body>
 </html>
